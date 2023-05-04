@@ -12,6 +12,14 @@ Shader "Unlit/S_Outline"
         //OutlinePass
         Pass
         {
+            Tags
+            {
+                "Queue"="Transparent"
+            }
+
+            Blend SrcAlpha OneMinusSrcAlpha
+            ZWrite Off
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -61,7 +69,7 @@ Shader "Unlit/S_Outline"
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-                return _OutColor;
+                return float4(_OutColor.r, _OutColor.g, _OutColor.b, col.a);
             }
             ENDCG
         }
@@ -69,6 +77,13 @@ Shader "Unlit/S_Outline"
         //TexturePass
         Pass
         {
+            Tags
+            {
+                "Queue"="Transparent+1"
+            }
+
+            Blend SrcAlpha OneMinusSrcAlpha
+
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
